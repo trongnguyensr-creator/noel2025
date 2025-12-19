@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Merry Christmas Em Yêu 🎄</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- PHẦN 1: Joke dễ thương (màn mở đầu) -->
     <div id="jokeSection" class="section active">
         <div class="joke-container">
             <h1 class="joke-question">EM CÓ ĐỒNG Ý LÀM BẠN GÁI ANH HONG? 💖</h1>
@@ -18,26 +18,38 @@
         </div>
     </div>
 
+    <!-- PHẦN 2: Thư Giáng Sinh (nội dung chính) -->
     <div id="letterSection" class="section">
         <div class="letter-container">
             <h1 class="letter-title">Merry Christmas Em Yêu 🎄</h1>
             
             <div class="letter-content">
                 <p class="greeting">Gửi em yêu của anh,</p>
+                
                 <p>Giáng Sinh năm nay thật đặc biệt với anh, bởi vì anh có em bên cạnh. Mỗi ngày trôi qua, anh càng thấy mình may mắn biết bao khi được có em trong cuộc đời mình.</p>
+                
                 <p>Em biết không, tuyết rơi đẹp nhất là khi có em ở bên. Ánh đèn Noel lung linh nhất là khi được nhìn thấy nụ cười của em. Và món quà ý nghĩa nhất mà anh nhận được chính là tình yêu của em. 💝</p>
+                
                 <p>Anh muốn nói với em rằng: Cảm ơn em đã đến bên anh, đã cho anh những khoảnh khắc hạnh phúc nhất. Cảm ơn em vì mọi thứ - từ những lúc vui vẻ cho đến những lúc khó khăn, em luôn ở đó với anh.</p>
+                
                 <p>Mùa Giáng Sinh này, anh mong ước được cùng em tạo nên thật nhiều kỷ niệm đẹp. Và không chỉ mùa Noel này, anh mong được cùng em đi qua thật nhiều mùa Giáng Sinh nữa, thật nhiều mùa đông ấm áp bên nhau.</p>
+                
                 <p class="closing">Mãi yêu em,<br>Anh của em ❤️</p>
-                <div class="decoration">🎄 ⛄ 🎁 ❄️ 🔔 ✨</div>
+                
+                <div class="decoration">
+                    🎄 ⛄ 🎁 ❄️ 🔔 ✨
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Canvas cho hiệu ứng tuyết rơi -->
     <canvas id="snowCanvas"></canvas>
 
+    <!-- Audio element (không autoplay) -->
     <audio id="christmasMusic" loop>
         <source src="giangsinh.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ audio.
     </audio>
 
     <script src="script.js"></script>

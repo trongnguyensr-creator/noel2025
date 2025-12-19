@@ -5,53 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Merry Christmas Em Yêu 🎄</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎄</text></svg>">
 </head>
 <body>
-    <!-- PHẦN 1: Joke dễ thương (màn mở đầu) -->
-    <div id="jokeSection" class="section active">
-        <div class="joke-container">
-            <h1 class="joke-question">EM CÓ ĐỒNG Ý LÀM BẠN GÁI ANH HONG? 💖</h1>
-            <div class="buttons-container">
-                <button id="yesBtn" class="btn btn-yes">ĐỒNG Ý 💘</button>
-                <button id="noBtn" class="btn btn-no">HONG 😝</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- PHẦN 2: Thư Giáng Sinh (nội dung chính) -->
-    <div id="letterSection" class="section">
-        <div class="letter-container">
-            <h1 class="letter-title">Merry Christmas Em Yêu 🎄</h1>
+    <!-- Hiệu ứng tuyết rơi -->
+    <div class="snowflakes" aria-hidden="true"></div>
+    
+    <!-- PHẦN 1: JOKE DỄ THƯƠNG -->
+    <div id="phase1" class="phase-container">
+        <div class="joke-content">
+            <h1 class="joke-title">
+                EM CÓ ĐỒNG Ý<br>LÀM BẠN GÁI ANH HONG? 💖
+            </h1>
             
-            <div class="letter-content">
-                <p class="greeting">Gửi em yêu của anh,</p>
+            <div class="buttons-container">
+                <!-- Nút ĐỒNG Ý - cố định -->
+                <button id="yes-btn" class="yes-btn">
+                    ĐỒNG Ý 💘
+                </button>
                 
-                <p>Giáng Sinh năm nay thật đặc biệt với anh, bởi vì anh có em bên cạnh. Mỗi ngày trôi qua, anh càng thấy mình may mắn biết bao khi được có em trong cuộc đời mình.</p>
-                
-                <p>Em biết không, tuyết rơi đẹp nhất là khi có em ở bên. Ánh đèn Noel lung linh nhất là khi được nhìn thấy nụ cười của em. Và món quà ý nghĩa nhất mà anh nhận được chính là tình yêu của em. 💝</p>
-                
-                <p>Anh muốn nói với em rằng: Cảm ơn em đã đến bên anh, đã cho anh những khoảnh khắc hạnh phúc nhất. Cảm ơn em vì mọi thứ - từ những lúc vui vẻ cho đến những lúc khó khăn, em luôn ở đó với anh.</p>
-                
-                <p>Mùa Giáng Sinh này, anh mong ước được cùng em tạo nên thật nhiều kỷ niệm đẹp. Và không chỉ mùa Noel này, anh mong được cùng em đi qua thật nhiều mùa Giáng Sinh nữa, thật nhiều mùa đông ấm áp bên nhau.</p>
-                
-                <p class="closing">Mãi yêu em,<br>Anh của em ❤️</p>
-                
-                <div class="decoration">
-                    🎄 ⛄ 🎁 ❄️ 🔔 ✨
-                </div>
+                <!-- Nút HONG - di chuyển -->
+                <button id="no-btn" class="no-btn">
+                    HONG 😝
+                </button>
+            </div>
+            
+            <!-- Decoration -->
+            <div class="decoration">
+                🎅 🎄 ⭐ 🔔 🦌
             </div>
         </div>
     </div>
 
-    <!-- Canvas cho hiệu ứng tuyết rơi -->
-    <canvas id="snowCanvas"></canvas>
-
-    <!-- Audio element (không autoplay) -->
-    <audio id="christmasMusic" loop>
-        <source src="giangsinh.mp3" type="audio/mpeg">
-        Trình duyệt của bạn không hỗ trợ audio.
+    <!-- PHẦN 2: THƯ GIÁNG SINH -->
+    <div id="phase2" class="phase-container hidden">
+        <div class="container">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="title">Merry Christmas <span id="girlfriend-name">Em yêu</span> 🎄</h1>
+                <div class="christmas-icons">
+                    <span class="icon">🎅</span>
+                    <span class="icon">🎁</span>
+                    <span class="icon">🌟</span>
+                    <span class="icon">🔔</span>
+                    <span class="icon">🦌</span>
+                </div>
+            </header>
+            
+            <!-- Cây thông Noel -->
+            <div class="tree-container">
+                <div class="tree">
+                    <div class="tree-top"></div>
+                    <div class="tree-middle"></div>
+                    <div class="tree-bottom"></div>
+                    <div class="trunk"></div>
+                </div>
+                <!-- Đèn trang trí trên cây -->
+                <div class="ornament ornament-1"></div>
+                <div class="ornament ornament-2"></div>
+                <div class="ornament ornament-3"></div>
+                <div class="ornament ornament-4"></div>
+                <div class="ornament ornament-5"></div>
+                <div class="star"></div>
+            </div>
+            
+            <!-- Phần nội dung chính -->
+            <main class="content">
+                <!-- Nút mở quà -->
+                <div id="gift-section" class="gift-section">
+                    <button id="gift-btn" class="gift-btn">
+                        🎁 Mở quà từ anh
+                    </button>
+                </div>
+                
+                <!-- Thư tình ẩn ban đầu -->
+                <div id="letter" class="letter hidden">
+                    <div class="letter-header">
+                        <h2><i class="heart-icon">❤️</i> Gửi em yêu của anh <i class="heart-icon">❤️</i></h2>
+                        <p class="date">Giáng Sinh, ngày 24/12</p>
+                    </div>
+                    <div class="letter-content">
+                        <p>Em yêu,</p>
+                        <p>Một mùa Giáng Sinh nữa lại đến, và anh thật hạnh phúc khi có em bên cạnh. Cảm ơn em vì đã đến bên anh, mang đến cho anh những ngày tháng ngọt ngào và ấm áp nhất.</p>
+                        <p>Nhìn lại một năm qua, mọi kỷ niệm bên em đều là món quà vô giá với anh. Từ những buổi sáng cùng nhau uống cà phê, những lần dạo phố trong tiết trời se lạnh, đến những lời động viên khi anh gặp khó khăn... tất cả đều khiến anh biết ơn vì có em trong đời.</p>
+                        <p>Anh mong rằng chúng mình sẽ cùng nhau đi qua thật nhiều mùa Giáng Sinh nữa, cùng nhau xây dựng tổ ấm nhỏ, cùng nhau đón những niềm vui và vượt qua mọi thử thách. Anh muốn là người che chở, bảo vệ và mang lại hạnh phúc cho em mỗi ngày.</p>
+                        <p>Giáng Sinh này, dù không có món quà vật chất lớn lao, nhưng anh muốn dành tặng em tất cả tình yêu và sự trân trọng từ sâu thẳm trái tim mình. Anh yêu em nhiều hơn những gì lời nói có thể diễn tả.</p>
+                        <p>Chúc em yêu của anh một Giáng Sinh thật ấm áp, ngập tràn yêu thương và hạnh phúc!</p>
+                        <p class="signature">Mãi yêu em,<br><span class="boyfriend-name">Người yêu của em</span></p>
+                    </div>
+                    <div class="letter-footer">
+                        🎄 ⭐ ❤️ 🔔 ❄️
+                    </div>
+                </div>
+            </main>
+            
+            <!-- Footer -->
+            <footer class="footer">
+                <p class="footer-note">Trang web này được tạo riêng cho em, để mỗi Giáng Sinh chúng ta cùng nhìn lại và thêm yêu nhau ❤️</p>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- Nhạc nền (tự động phát khi sang phase 2) -->
+    <audio id="bg-music" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-christmas-is-here-1161.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ phát nhạc.
     </audio>
-
+    
+    <!-- Script -->
     <script src="script.js"></script>
 </body>
 </html>

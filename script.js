@@ -5,6 +5,8 @@ let isMusicPlaying = false;
 let isSnowActive = true;
 let typingElements = [];
 let currentTypingIndex = 0;
+let noBtnClickCount = 0;
+let yesBtnClicked = false;
 
 // Đợi DOM tải xong
 document.addEventListener('DOMContentLoaded', function() {
@@ -12,19 +14,104 @@ document.addEventListener('DOMContentLoaded', function() {
     const splashScreen = document.getElementById('splash-screen');
     const mainContent = document.getElementById('main-content');
     const startBtn = document.getElementById('start-btn');
+    const yesBtn = document.getElementById('yes-btn');
+    const noBtn = document.getElementById('no-btn');
     const musicToggle = document.getElementById('music-toggle');
     const snowToggle = document.getElementById('snow-toggle');
     const christmasMusic = document.getElementById('christmas-music');
     const snowContainer = document.getElementById('snow-container');
     const splashSnowContainer = document.getElementById('splash-snow-container');
+    const jokeScreen = document.getElementById('joke-screen');
+    const attemptCount = document.getElementById('attempt-count');
     
-    // Ẩn nội dung chính ban đầu
+    // Ẩn nội dung chính ban đầu và nút bắt đầu
     mainContent.classList.add('hidden');
+    startBtn.classList.add('hidden');
     
     // Tạo tuyết cho màn hình chào
     createSplashSnow();
     
-    // Xử lý khi nhấn nút bắt đầu
+    // Xử lý khi nhấn nút ĐỒNG Ý
+    yesBtn.addEventListener('click', function() {
+        if (yesBtnClicked) return; // Ngăn nhấn nhiều lần
+        
+        yesBtnClicked = true;
+        
+        // Thêm hiệu ứng cho nút ĐỒNG Ý
+        this.style.animation = 'none';
+        this.style.transform = 'scale(1.2)';
+        this.innerHTML = '<i class="fas fa-heart"></i> YÊU ANH NHIỀU!';
+        this.style.background = 'linear-gradient(to right, #FF1493, #FF69B4)';
+        
+        // Thêm hiệu ứng trái tim bay lên
+        createHearts();
+        
+        // Hiện thông báo vui
+        const jokeContent = document.querySelector('.joke-content');
+        const successMessage = document.createElement('div');
+        successMessage.className = 'success-message';
+        successMessage.innerHTML = `
+            <div style="font-size: 1.5rem; color: #ffd166; margin: 1rem 0;">
+                <i class="fas fa-heart" style="color: #ff6b6b;"></i> 
+                Yeah! Anh biết mà! 
+                <i class="fas fa-heart" style="color: #ff6b6b;"></i>
+            </div>
+            <div style="font-size: 1.2rem; color: #a5d8ff;">
+                Giờ thì mở quà thôi nào! 
+                <i class="fas fa-gift" style="color: #ff9e7d;"></i>
+            </div>
+        `;
+        jokeContent.appendChild(successMessage);
+        
+        // Ẩn nút HONG nếu còn hiển thị
+        noBtn.style.display = 'none';
+        
+        // Hiện nút bắt đầu sau 2 giây
+        setTimeout(() => {
+            startBtn.classList.remove('hidden');
+            startBtn.style.animation = 'bounce 1s infinite, gentle-shake 2s ease-in-out infinite';
+            
+            // Cuộn đến nút bắt đầu
+            startBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 2000);
+    });
+    
+    // Xử lý khi nhấn nút HONG
+    noBtn.addEventListener('click', function() {
+        // Tăng số lần từ chối
+        noBtnClickCount++;
+        attemptCount.textContent = noBtnClickCount;
+        
+        // Thay đổi vị trí nút HONG ngẫu nhiên
+        moveNoButton();
+        
+        // Thay đổi văn bản nút HONG theo số lần nhấn
+        changeNoButtonText();
+        
+        // Hiệu ứng rung cho nút ĐỒNG Ý
+        yesBtn.style.animation = 'gentle-shake 0.5s ease';
+        setTimeout(() => {
+            yesBtn.style.animation = 'yesPulse 2s infinite';
+        }, 500);
+        
+        // Tăng kích thước nút ĐỒNG Ý sau mỗi lần từ chối
+        const currentScale = 1 + (noBtnClickCount * 0.05);
+        yesBtn.style.transform = `scale(${Math.min(currentScale, 1.3)})`;
+        
+        // Đổi màu nút ĐỒNG Ý sau một số lần nhất định
+        if (noBtnClickCount >= 5) {
+            yesBtn.style.background = 'linear-gradient(to right, #FF4500, #FF8C00)';
+        }
+        if (noBtnClickCount >= 10) {
+            yesBtn.style.background = 'linear-gradient(to right, #8B0000, #DC143C)';
+            yesBtn.innerHTML = '<i class="fas fa-heart-broken"></i> LÀM ƠN ĐI MÀ!';
+        }
+        
+        // Hiển thị tin nhắn vui sau một số lần từ chối
+        showFunnyMessage();
+    });
+    
+    // Xử lý khi nhấn nút bắt đầu (sau khi đã đồng ý)
     startBtn.addEventListener('click', function() {
         // Thêm hiệu ứng nhấn nút
         this.style.animation = 'none';
@@ -40,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
             updateMusicButton();
         }).catch(error => {
             console.log("Không thể phát nhạc tự động: ", error);
-            // Vẫn tiếp tục hiển thị nội dung nếu không thể phát nhạc
         });
         
         // Ẩn màn hình chào với hiệu ứng
@@ -95,6 +181,173 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Hàm di chuyển nút HONG
+    function moveNoButton() {
+        const jokeButtons = document.querySelector('.joke-buttons');
+        const buttonWidth = noBtn.offsetWidth;
+        const buttonHeight = noBtn.offsetHeight;
+        const containerWidth = jokeButtons.offsetWidth;
+        const containerHeight = jokeButtons.offsetHeight;
+        
+        // Tính vị trí mới, tránh để nút ra ngoài container
+        const maxX = containerWidth - buttonWidth;
+        const maxY = containerHeight - buttonHeight;
+        
+        // Tạo vị trí ngẫu nhiên
+        let newX, newY;
+        let attempts = 0;
+        
+        do {
+            newX = Math.random() * maxX;
+            newY = Math.random() * maxY;
+            attempts++;
+            
+            // Tránh bị kẹt trong vòng lặp vô hạn
+            if (attempts > 100) {
+                newX = maxX / 2;
+                newY = maxY / 2;
+                break;
+            }
+            
+        // Đảm bảo nút không quá gần nút ĐỒNG Ý
+        } while (Math.abs(newX - (containerWidth/2 - buttonWidth/2)) < buttonWidth * 1.5 && 
+                 Math.abs(newY - (containerHeight/2 - buttonHeight/2)) < buttonHeight * 1.5);
+        
+        // Áp dụng vị trí mới với hiệu ứng
+        noBtn.style.position = 'absolute';
+        noBtn.style.left = `${newX}px`;
+        noBtn.style.top = `${newY}px`;
+        noBtn.style.transition = 'all 0.5s ease';
+        
+        // Thêm hiệu ứng xoay
+        noBtn.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
+    }
+    
+    // Hàm thay đổi văn bản nút HONG
+    function changeNoButtonText() {
+        const texts = [
+            "HONG",
+            "Thử lại đi",
+            "Chắc không?",
+            "Suy nghĩ lại đi",
+            "Hong nha",
+            "Chọn cái kia đi",
+            "Sai rồi",
+            "Đừng thế chứ",
+            "Anh buồn đấy",
+            "Làm ơn mà",
+            "Em xinh thế này",
+            "Anh sẽ buồn lắm",
+            "Hong được đâu",
+            "Thôi mà",
+            "Pretty please?"
+        ];
+        
+        const randomIndex = Math.min(noBtnClickCount - 1, texts.length - 1);
+        noBtn.innerHTML = `<i class="fas fa-times"></i> ${texts[randomIndex]}`;
+    }
+    
+    // Hàm hiển thị tin nhắn vui
+    function showFunnyMessage() {
+        const messages = [
+            { count: 3, text: "Anh không bỏ cuộc đâu!" },
+            { count: 5, text: "Anh sẽ đợi đến khi em đồng ý!" },
+            { count: 8, text: "Kiên nhẫn là đức tính tốt mà!" },
+            { count: 12, text: "Anh có thể làm điều này cả ngày!" },
+            { count: 15, text: "Em thắng rồi, nhưng hãy thử nút ĐỒNG Ý đi!" }
+        ];
+        
+        for (const msg of messages) {
+            if (noBtnClickCount === msg.count) {
+                // Tạo thông báo tạm thời
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'funny-message';
+                messageDiv.textContent = msg.text;
+                messageDiv.style.cssText = `
+                    position: absolute;
+                    top: -40px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: rgba(255, 209, 102, 0.9);
+                    color: #0a0f1e;
+                    padding: 8px 15px;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    z-index: 100;
+                    white-space: nowrap;
+                    animation: fadeInOut 3s ease;
+                `;
+                
+                // Thêm CSS animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes fadeInOut {
+                        0%, 100% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+                        20%, 80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                document.querySelector('.joke-buttons').appendChild(messageDiv);
+                
+                // Xóa thông báo sau 3 giây
+                setTimeout(() => {
+                    messageDiv.remove();
+                    style.remove();
+                }, 3000);
+                break;
+            }
+        }
+    }
+    
+    // Hàm tạo hiệu ứng trái tim bay lên
+    function createHearts() {
+        const heartsContainer = document.querySelector('.joke-content');
+        
+        for (let i = 0; i < 15; i++) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '<i class="fas fa-heart"></i>';
+            heart.style.cssText = `
+                position: absolute;
+                color: #ff6b6b;
+                font-size: ${Math.random() * 20 + 15}px;
+                top: 50%;
+                left: 50%;
+                z-index: 100;
+                opacity: 0;
+                pointer-events: none;
+            `;
+            
+            heartsContainer.appendChild(heart);
+            
+            // Animation cho trái tim
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 100 + 50;
+            const duration = Math.random() * 1000 + 1000;
+            
+            const animation = heart.animate([
+                { 
+                    opacity: 0, 
+                    transform: 'translate(-50%, -50%) scale(0) rotate(0deg)' 
+                },
+                { 
+                    opacity: 1, 
+                    transform: 'translate(-50%, -50%) scale(1) rotate(0deg)' 
+                },
+                { 
+                    opacity: 0, 
+                    transform: `translate(${Math.cos(angle) * distance - 50}%, ${Math.sin(angle) * distance - 50}%) scale(0.5) rotate(${Math.random() * 360}deg)` 
+                }
+            ], {
+                duration: duration,
+                easing: 'cubic-bezier(0.215, 0.610, 0.355, 1)'
+            });
+            
+            // Xóa trái tim sau khi animation kết thúc
+            animation.onfinish = () => heart.remove();
+        }
+    }
+    
     // Hàm cập nhật trạng thái nút nhạc
     function updateMusicButton() {
         const icon = musicToggle.querySelector('i');
@@ -129,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Tạo hạt tuyết mới
             createSnowflake(splashSnowContainer, true);
             
-        }, 80); // Tạo hạt tuyết mới mỗi 80ms
+        }, 80);
     }
     
     // Hàm tạo hiệu ứng tuyết rơi chính
@@ -150,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 createSnowflake(snowContainer, false);
             }
             
-        }, 30); // Tạo hạt tuyết mới mỗi 30ms
+        }, 30);
     }
     
     // Hàm tạo một hạt tuyết
@@ -178,8 +431,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const driftX = (Math.random() - 0.5) * 150;
         
         // Tính toán độ mờ dần và thu nhỏ
-        const fadeStart = Math.random() * 0.7 + 0.3; // Bắt đầu mờ dần từ 30-100% thời gian
-        const shrinkStart = Math.random() * 0.6 + 0.4; // Bắt đầu thu nhỏ từ 40-100% thời gian
+        const fadeStart = Math.random() * 0.7 + 0.3;
+        const shrinkStart = Math.random() * 0.6 + 0.4;
         
         // Tạo animation bằng JavaScript để có hiệu ứng mờ dần và thu nhỏ
         let startTime = null;
@@ -292,7 +545,7 @@ document.addEventListener('DOMContentLoaded', function() {
         element.appendChild(cursor);
         
         // Tốc độ gõ chữ ngẫu nhiên
-        const typingSpeed = Math.random() * 30 + 20; // 20-50ms mỗi ký tự
+        const typingSpeed = Math.random() * 30 + 20;
         
         let charIndex = 0;
         
@@ -324,7 +577,7 @@ document.addEventListener('DOMContentLoaded', function() {
         typeChar();
     }
     
-    // Thêm CSS animation cho tuyết rơi
+    // Thêm CSS animation
     const style = document.createElement('style');
     document.head.appendChild(style);
     
@@ -356,13 +609,4 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.animation = 'float 4s ease-in-out infinite, gentle-shake 3s ease-in-out infinite';
         });
     }
-    
-    // Hiệu ứng cho nút bắt đầu khi hover
-    startBtn.addEventListener('mouseenter', function() {
-        this.style.animation = 'bounce 0.8s infinite, gentle-shake 1.5s ease-in-out infinite';
-    });
-    
-    startBtn.addEventListener('mouseleave', function() {
-        this.style.animation = 'bounce 2s infinite, gentle-shake 3s ease-in-out infinite';
-    });
 });

@@ -37,7 +37,32 @@
                 <div class="gift-sparkle" id="sparkle3"></div>
             </div>
             
-            <button id="start-btn" class="start-btn">
+            <!-- Joke nhỏ trước khi vào trang -->
+            <div id="joke-screen" class="joke-screen">
+                <div class="joke-content">
+                    <div class="joke-heart">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h2 class="joke-question">Em có đồng ý làm người yêu anh hong?</h2>
+                    <p class="joke-hint">(Chọn 1 trong 2 nút bên dưới nhé!)</p>
+                    
+                    <div class="joke-buttons">
+                        <button id="yes-btn" class="yes-btn">
+                            <i class="fas fa-check"></i> ĐỒNG Ý
+                        </button>
+                        <button id="no-btn" class="no-btn">
+                            <i class="fas fa-times"></i> HONG
+                        </button>
+                    </div>
+                    
+                    <div class="joke-counter">
+                        <span id="attempt-count">0</span> lần từ chối
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Nút bắt đầu ban đầu (sẽ bị ẩn) -->
+            <button id="start-btn" class="start-btn hidden">
                 <i class="fas fa-music"></i> <span class="btn-text">🎵 Nhấn để bật nhạc và mở quà 🎁</span>
             </button>
             

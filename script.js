@@ -1,184 +1,269 @@
-// ===========================
-// CẤU HÌNH CÁ NHÂN HÓA
-// ===========================
-const girlfriendName = "Vy"; // Thay tên bạn gái tại đây
+// ============================================
+// TRANG WEB CHÚC MỪNG GIÁNG SINH CHO BẠN GÁI
+// ============================================
 
-// ===========================
-// KHỞI TẠO CÁC PHẦN TỬ
-// ===========================
-const jokeSection = document.getElementById('jokeSection');
-const letterSection = document.getElementById('letterSection');
-const yesBtn = document.getElementById('yesBtn');
-const noBtn = document.getElementById('noBtn');
-const christmasMusic = document.getElementById('christmasMusic');
-const snowCanvas = document.getElementById('snowCanvas');
-const ctx = snowCanvas.getContext('2d');
+// Tên bạn gái (có thể thay đổi)
+let girlfriendName = "Em yêu";
 
-// Thiết lập kích thước canvas
-snowCanvas.width = window.innerWidth;
-snowCanvas.height = window.innerHeight;
+// ====================
+// KHỞI TẠO TRANG WEB
+// ====================
 
-// ===========================
-// XỬ LÝ NÚT "HONG" (NÉ ĐI)
-// ===========================
-let isAvoiding = false;
-
-// Hàm tính toán vị trí random mới cho nút
-function moveNoButton() {
-    if (isAvoiding) return;
+document.addEventListener('DOMContentLoaded', function() {
+    // Hiển thị tên bạn gái
+    document.getElementById('girlfriend-name').textContent = girlfriendName;
     
-    isAvoiding = true;
-    noBtn.classList.add('avoiding');
+    // Tạo hiệu ứng tuyết rơi
+    createSnowflakes();
     
-    const maxX = window.innerWidth - noBtn.offsetWidth - 40;
-    const maxY = window.innerHeight - noBtn.offsetHeight - 40;
-    
-    const randomX = Math.max(20, Math.random() * maxX);
-    const randomY = Math.max(20, Math.random() * maxY);
-    
-    noBtn.style.left = randomX + 'px';
-    noBtn.style.top = randomY + 'px';
-    
-    setTimeout(() => {
-        isAvoiding = false;
-    }, 300);
-}
-
-// Xử lý khi hover vào nút HONG
-noBtn.addEventListener('mouseenter', moveNoButton);
-
-// Xử lý khi click vào nút HONG (trên mobile)
-noBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    moveNoButton();
+    // Khởi tạo các sự kiện
+    initPhase1Events();
+    initPhase2Events();
 });
 
-// Xử lý touch cho mobile
-noBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    moveNoButton();
-});
+// ====================
+// TẠO HIỆU ỨNG TUYẾT RƠI
+// ====================
 
-// ===========================
-// XỬ LÝ NÚT "ĐỒNG Ý"
-// ===========================
-yesBtn.addEventListener('click', () => {
-    // Chuyển sang phần 2
-    jokeSection.classList.remove('active');
-    letterSection.classList.add('active');
+function createSnowflakes() {
+    const snowflakesContainer = document.querySelector('.snowflakes');
+    const snowflakeCount = 50;
     
-    // Phát nhạc
-    playChristmasMusic();
-});
-
-// ===========================
-// PHÁT NHẠC GIÁNG SINH
-// ===========================
-function playChristmasMusic() {
-    // Thử phát nhạc
-    const playPromise = christmasMusic.play();
-    
-    if (playPromise !== undefined) {
-        playPromise
-            .then(() => {
-                // Nhạc phát thành công
-                console.log('🎵 Nhạc Giáng Sinh đang phát...');
-            })
-            .catch(error => {
-                // Trình duyệt chặn autoplay
-                console.log('⚠️ Trình duyệt chặn phát nhạc tự động. Người dùng cần tương tác để phát nhạc.');
-                
-                // Thử phát lại khi người dùng click vào màn hình
-                document.addEventListener('click', () => {
-                    christmasMusic.play().catch(e => console.log('Không thể phát nhạc:', e));
-                }, { once: true });
-            });
-    }
-}
-
-// ===========================
-// HIỆU ỨNG TUYẾT RƠI
-// ===========================
-class Snowflake {
-    constructor() {
-        this.x = Math.random() * snowCanvas.width;
-        this.y = Math.random() * snowCanvas.height - snowCanvas.height;
-        this.radius = Math.random() * 2 + 1; // Kích thước 1-3px
-        this.speed = Math.random() * 1 + 0.5; // Tốc độ rơi chậm
-        this.drift = Math.random() * 0.5 - 0.25; // Dao động ngang
-        this.opacity = Math.random() * 0.6 + 0.3; // Độ mờ 0.3-0.9
-    }
-    
-    update() {
-        this.y += this.speed;
-        this.x += this.drift;
+    for (let i = 0; i < snowflakeCount; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
         
-        // Reset khi tuyết rơi xuống đáy
-        if (this.y > snowCanvas.height) {
-            this.y = -10;
-            this.x = Math.random() * snowCanvas.width;
-        }
+        // Kích thước ngẫu nhiên
+        const size = Math.random() * 10 + 5;
+        snowflake.style.width = `${size}px`;
+        snowflake.style.height = `${size}px`;
         
-        // Giữ tuyết trong khung hình (dao động ngang)
-        if (this.x > snowCanvas.width) {
-            this.x = 0;
-        } else if (this.x < 0) {
-            this.x = snowCanvas.width;
-        }
-    }
-    
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-        ctx.fill();
-        ctx.closePath();
+        // Vị trí ngẫu nhiên
+        snowflake.style.left = `${Math.random() * 100}vw`;
+        
+        // Tốc độ rơi ngẫu nhiên
+        const duration = Math.random() * 5 + 5;
+        snowflake.style.animationDuration = `${duration}s`;
+        
+        // Độ trễ ngẫu nhiên
+        snowflake.style.animationDelay = `${Math.random() * 5}s`;
+        
+        // Độ mờ ngẫu nhiên
+        snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+        
+        snowflakesContainer.appendChild(snowflake);
     }
 }
 
-// Tạo mảng chứa các bông tuyết (nhiều tuyết)
-const snowflakes = [];
-const snowflakeCount = 150; // Số lượng tuyết (có thể điều chỉnh)
+// ====================
+// PHẦN 1: JOKE DỄ THƯƠNG
+// ====================
 
-for (let i = 0; i < snowflakeCount; i++) {
-    snowflakes.push(new Snowflake());
-}
-
-// Hàm vẽ tuyết
-function animateSnow() {
-    ctx.clearRect(0, 0, snowCanvas.width, snowCanvas.height);
+function initPhase1Events() {
+    const yesBtn = document.getElementById('yes-btn');
+    const noBtn = document.getElementById('no-btn');
     
-    snowflakes.forEach(snowflake => {
-        snowflake.update();
-        snowflake.draw();
+    // Xử lý nút "ĐỒNG Ý"
+    yesBtn.addEventListener('click', function() {
+        // Phát nhạc
+        const bgMusic = document.getElementById('bg-music');
+        bgMusic.play().catch(e => console.log("Không thể tự động phát nhạc:", e));
+        
+        // Chuyển sang Phase 2
+        const phase1 = document.getElementById('phase1');
+        const phase2 = document.getElementById('phase2');
+        
+        phase1.classList.add('fade-out');
+        
+        setTimeout(() => {
+            phase1.classList.add('hidden');
+            phase2.classList.remove('hidden');
+        }, 800);
     });
     
-    requestAnimationFrame(animateSnow);
+    // Xử lý nút "HONG" - chạy trốn
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        moveNoButton();
+    });
+    
+    // Đặt vị trí ban đầu cho nút HONG
+    moveNoButton();
 }
 
-// Bắt đầu hiệu ứng tuyết
-animateSnow();
-
-// ===========================
-// XỬ LÝ RESIZE WINDOW
-// ===========================
-window.addEventListener('resize', () => {
-    snowCanvas.width = window.innerWidth;
-    snowCanvas.height = window.innerHeight;
+function moveNoButton() {
+    const noBtn = document.getElementById('no-btn');
+    const container = document.querySelector('.buttons-container');
     
-    // Reset vị trí nút HONG nếu đang ở chế độ "né"
-    if (noBtn.classList.contains('avoiding')) {
-        noBtn.classList.remove('avoiding');
-        noBtn.style.left = '';
-        noBtn.style.top = '';
-        isAvoiding = false;
-    }
-});
+    // Lấy kích thước container
+    const containerRect = container.getBoundingClientRect();
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+    
+    // Tạo vị trí ngẫu nhiên (tránh nút ĐỒNG Ý ở giữa)
+    let newX, newY;
+    let attempts = 0;
+    
+    do {
+        newX = Math.random() * (containerRect.width - btnWidth);
+        newY = Math.random() * (containerRect.height - btnHeight);
+        attempts++;
+    } while (isNearCenter(newX, newY, containerRect, btnWidth, btnHeight) && attempts < 10);
+    
+    noBtn.style.left = `${newX}px`;
+    noBtn.style.top = `${newY}px`;
+}
 
-// ===========================
-// CONSOLE MESSAGE DỄ THƯƠNG
-// ===========================
-console.log(`
-🎄✨ Merry Christmas ${girlfriendName}! ✨🎄
-💖 Website được làm với tất cả tình yêu thương! 💖
-`);
+function isNearCenter(x, y, containerRect, btnWidth, btnHeight) {
+    const centerX = containerRect.width / 2;
+    const centerY = containerRect.height / 2;
+    const btnCenterX = x + btnWidth / 2;
+    const btnCenterY = y + btnHeight / 2;
+    
+    const distance = Math.sqrt(
+        Math.pow(btnCenterX - centerX, 2) + 
+        Math.pow(btnCenterY - centerY, 2)
+    );
+    
+    // Nếu khoảng cách < 150px thì quá gần trung tâm
+    return distance < 150;
+}
+
+// ====================
+// PHẦN 2: THƯ GIÁNG SINH
+// ====================
+
+function initPhase2Events() {
+    // Nút mở quà
+    const giftBtn = document.getElementById('gift-btn');
+    const letter = document.getElementById('letter');
+    const giftSection = document.getElementById('gift-section');
+    
+    giftBtn.addEventListener('click', function() {
+        // Ẩn nút mở quà
+        giftSection.style.display = 'none';
+        
+        // Hiển thị thư với hiệu ứng
+        letter.classList.remove('hidden');
+        
+        // Thêm hiệu ứng đánh máy cho từng đoạn văn
+        typeWriterEffect();
+        
+        // Phát âm thanh hiệu ứng
+        playSoundEffect();
+    });
+}
+
+// ====================
+// HIỆU ỨNG ĐÁNH MÁY CHO THƯ
+// ====================
+
+function typeWriterEffect() {
+    const paragraphs = document.querySelectorAll('.letter-content p');
+    
+    paragraphs.forEach((paragraph, index) => {
+        // Lưu nội dung gốc
+        const originalText = paragraph.textContent;
+        paragraph.textContent = '';
+        paragraph.style.opacity = '0';
+        
+        // Hiển thị từng đoạn với độ trễ
+        setTimeout(() => {
+            paragraph.style.opacity = '1';
+            let i = 0;
+            const typeWriter = () => {
+                if (i < originalText.length) {
+                    paragraph.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 30);
+                }
+            };
+            typeWriter();
+        }, index * 1500);
+    });
+}
+
+// ====================
+// PHÁT ÂM THANH HIỆU ỨNG
+// ====================
+
+function playSoundEffect() {
+    // Tạo âm thanh chuông nhỏ khi mở quà
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // Nốt C5
+        oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // Nốt E5
+        oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // Nốt G5
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+    } catch (e) {
+        console.log("Trình duyệt không hỗ trợ Web Audio API");
+    }
+}
+
+// ====================
+// HIỂN THỊ THÔNG BÁO
+// ====================
+
+function showMessage(message, type) {
+    // Tạo phần tử thông báo
+    const messageEl = document.createElement('div');
+    messageEl.textContent = message;
+    messageEl.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        z-index: 1000;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        animation: slideIn 0.5s ease-out, fadeOut 0.5s ease-in 2.5s forwards;
+    `;
+    
+    // Màu sắc theo loại thông báo
+    if (type === 'success') {
+        messageEl.style.backgroundColor = '#4CAF50';
+    } else {
+        messageEl.style.backgroundColor = '#FF6B8B';
+    }
+    
+    // Thêm CSS cho animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Thêm thông báo vào trang
+    document.body.appendChild(messageEl);
+    
+    // Tự động xóa sau 3 giây
+    setTimeout(() => {
+        if (messageEl.parentNode) {
+            messageEl.parentNode.removeChild(messageEl);
+        }
+        if (style.parentNode) {
+            style.parentNode.removeChild(style);
+        }
+    }, 3000);
+}

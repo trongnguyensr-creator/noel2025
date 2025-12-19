@@ -13,17 +13,34 @@
 <body>
     <!-- Màn hình chào -->
     <div id="splash-screen" class="splash-screen">
+        <!-- Tuyết xung quanh màn hình chào -->
+        <div id="splash-snow-container" class="snow-container"></div>
+        
         <div class="splash-content">
             <h1 class="splash-title">🎄 Giáng Sinh Ấm Áp 🎄</h1>
             <p class="splash-text">Dành tặng em yêu của anh</p>
-            <div class="gift-box">
-                <div class="gift-box-top"></div>
-                <div class="gift-box-body"></div>
-                <div class="ribbon"></div>
+            
+            <div class="gift-container">
+                <div class="gift-box">
+                    <div class="gift-box-top"></div>
+                    <div class="gift-box-body"></div>
+                    <div class="ribbon ribbon-vertical"></div>
+                    <div class="ribbon ribbon-horizontal"></div>
+                    <div class="gift-bow">
+                        <div class="bow-center"></div>
+                        <div class="bow-loop bow-left"></div>
+                        <div class="bow-loop bow-right"></div>
+                    </div>
+                </div>
+                <div class="gift-sparkle" id="sparkle1"></div>
+                <div class="gift-sparkle" id="sparkle2"></div>
+                <div class="gift-sparkle" id="sparkle3"></div>
             </div>
+            
             <button id="start-btn" class="start-btn">
-                <i class="fas fa-music"></i> 🎵 Nhấn để bật nhạc và mở quà 🎁
+                <i class="fas fa-music"></i> <span class="btn-text">🎵 Nhấn để bật nhạc và mở quà 🎁</span>
             </button>
+            
             <div class="hint">
                 <i class="fas fa-volume-up"></i> Hãy bật âm lượng để thưởng thức nhạc Giáng Sinh
             </div>
@@ -32,14 +49,18 @@
 
     <!-- Nội dung chính -->
     <div id="main-content" class="main-content hidden">
-        <!-- Container cho hiệu ứng tuyết -->
-        <div id="snow-container"></div>
+        <!-- Container cho hiệu ứng tuyết chính -->
+        <div id="snow-container" class="snow-container"></div>
+        
+        <!-- Ánh sáng lấp lánh cho tiêu đề -->
+        <div class="title-light-effect"></div>
         
         <!-- Nội dung trang -->
         <div class="container">
             <header class="header">
-                <h1 class="title">Merry Christmas Em Yêu <span class="christmas-tree">🎄</span></h1>
-                <p class="subtitle">Chúc em một mùa Giáng Sinh thật ấm áp và hạnh phúc</p>
+                <h1 class="title sparkle-text">Merry Christmas Em Yêu <span class="christmas-tree">🎄</span></h1>
+                <p class="subtitle" id="typed-subtitle"></p>
+                
                 <div class="music-controls">
                     <button id="music-toggle" class="music-btn">
                         <i class="fas fa-play"></i> Nhạc: Đang phát
@@ -56,29 +77,31 @@
                         <div class="card-icon">
                             <i class="fas fa-heart"></i>
                         </div>
-                        <h2>Gửi em yêu của anh,</h2>
+                        <h2 id="typed-greeting">Gửi em yêu của anh,</h2>
                         <div class="card-date">24/12/2023</div>
                     </div>
                     
                     <div class="card-body">
                         <div class="letter-content">
-                            <p>Giáng Sinh năm nay thật đặc biệt vì có em bên cạnh.</p>
+                            <p id="typed-line1" class="typed-line"></p>
+                            <p id="typed-line2" class="typed-line"></p>
+                            <p id="typed-line3" class="typed-line"></p>
+                            <p id="typed-line4" class="typed-line"></p>
                             
-                            <p>Mỗi khi mùa đông đến, những bông tuyết trắng rơi nhẹ nhàng, anh lại nghĩ về nụ cười ấm áp của em. Em chính là món quà tuyệt vời nhất mà cuộc đời đã ban tặng cho anh.</p>
-                            
-                            <p>Trong không khí của đêm Giáng Sinh lãng mạn, anh muốn gửi đến em những lời chúc ngọt ngào nhất: Chúc em luôn hạnh phúc, rạng rỡ và tràn đầy năng lượng. Chúc cho tình yêu của chúng ta mãi bền vững như những cây thông xanh tươi trong mùa đông giá lạnh.</p>
-                            
-                            <p>Cảm ơn em đã đến bên anh, cùng anh sưởi ấm những ngày đông giá lạnh. Hy vọng rằng mỗi mùa Giáng Sinh về, chúng ta lại có nhau, cùng đón những khoảnh khắc đẹp bên gia đình và những người thân yêu.</p>
-                            
-                            <p class="closing">Yêu em nhiều,<br>
+                            <p class="closing" id="typed-closing">Yêu em nhiều,<br>
                             <span class="signature">Người yêu của em</span></p>
                         </div>
                         
-                        <div classphoto-section>
+                        <div class="photo-section">
                             <div class="photo-frame">
-                                <div classphoto-placeholder">
+                                <div class="photo-placeholder">
                                     <i class="fas fa-camera"></i>
-                                    <p>Chỗ này dành cho ảnh của chúng mình</p>
+                                    <p id="typed-photo-text">Chỗ này dành cho ảnh của chúng mình</p>
+                                </div>
+                                <div class="photo-sparkles">
+                                    <div class="sparkle"></div>
+                                    <div class="sparkle"></div>
+                                    <div class="sparkle"></div>
                                 </div>
                             </div>
                             <p class="photo-note">Mỗi khoảnh khắc bên em đều là kỷ niệm đẹp với anh</p>
@@ -89,27 +112,27 @@
                         <div class="wishes">
                             <h3><i class="fas fa-star"></i> Lời chúc Giáng Sinh</h3>
                             <ul class="wishes-list">
-                                <li>Mong em luôn khỏe mạnh và hạnh phúc</li>
-                                <li>Chúc em thành công trong công việc và cuộc sống</li>
-                                <li>Hy vọng chúng ta sẽ có nhiều kỷ niệm đẹp bên nhau</li>
-                                <li>Chúc tình yêu của chúng ta mãi bền chặt</li>
+                                <li id="wish1">Mong em luôn khỏe mạnh và hạnh phúc</li>
+                                <li id="wish2">Chúc em thành công trong công việc và cuộc sống</li>
+                                <li id="wish3">Hy vọng chúng ta sẽ có nhiều kỷ niệm đẹp bên nhau</li>
+                                <li id="wish4">Chúc tình yêu của chúng ta mãi bền chặt</li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 
                 <div class="gallery">
-                    <div classgallery-item">
+                    <div class="gallery-item" id="gift-item">
                         <i class="fas fa-gift"></i>
                         <h4>Quà tặng yêu thương</h4>
                         <p>Món quà ý nghĩa nhất là tình yêu chúng ta dành cho nhau</p>
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item" id="tree-item">
                         <i class="fas fa-tree"></i>
                         <h4>Cây thông Noel</h4>
                         <p>Cầu nguyện những điều tốt đẹp nhất sẽ đến với em</p>
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item" id="cookie-item">
                         <i class="fas fa-cookie-bite"></i>
                         <h4>Bánh quy gừng</h4>
                         <p>Ngọt ngào như hương vị tình yêu của chúng mình</p>
@@ -118,7 +141,7 @@
             </main>
             
             <footer class="footer">
-                <p>Chúc em một mùa Giáng Sinh an lành và hạnh phúc bên gia đình!</p>
+                <p id="typed-footer">Chúc em một mùa Giáng Sinh an lành và hạnh phúc bên gia đình!</p>
                 <div class="footer-icons">
                     <i class="fas fa-snowflake"></i>
                     <i class="fas fa-heart"></i>
